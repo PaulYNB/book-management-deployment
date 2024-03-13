@@ -1,0 +1,33 @@
+1. 安装jdk1.8.0
+
+2. 为DUBBO设置Zookeeper:
+   a)运行zkcli 
+   b)在zkcli命令行运行 "ls /" 查看zookeeper有没/dubbo节点，如果没有该节点，执行步骤c)设置节点/dubbo
+   c)设置节点/dubbo权限，用户名设为"username", 密码设为"password"：
+     setAcl /dubbo auth:username:password:cdrwa
+     
+3. 修改book-management-provider.war\WEB-INF\classes\application.yml
+   1) 修改server.port为你的tomcat的访问端口。
+   2) 修改spring.datasource.url, spring.datasource.username, spring.datasource.password为你的数据库连接。
+   3) 修改dubbo.registry.address, dubbo.registry.username, dubbo.registry.password，使它们符合你的Zookeeper设置。
+   
+4. 修改book-management-consumer.war\WEB-INF\classes\application.yml
+   1) 修改server.port为你的tomcat的访问端口。
+   2) 修改dubbo.registry.address，使它们符合你的Zookeeper设置。
+
+5. MySQL数据库表DDL：
+CREATE TABLE `books` (
+  `bookid` varchar(30) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `author` varchar(45) NOT NULL,
+  PRIMARY KEY (`bookid`),
+  UNIQUE KEY `idbooks_UNIQUE` (`bookid`),
+  UNIQUE KEY `name_UNIQUE` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+6. WAR包发布：
+   发布book-management-consumer.war，book-management-provider.war到tomcat服务器的webapps目录下面，
+   先启动book-management-provider，再启动book-management-consumer。
+   
+7. 访问应用程序：
+   http://<server ip>:<tomcat access port>/book-management-consumer/

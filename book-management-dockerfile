@@ -1,0 +1,22 @@
+FROM ubuntu:latest
+FROM tomcat:8
+# 复制WAR应用程序包到Tomcat的webapps目录下
+RUN rm -rf /usr/local/tomcat/webapps
+RUN mv /usr/local/tomcat/webapps.dist /usr/local/tomcat/webapps
+COPY book-management-provider.war /usr/local/tomcat/webapps/
+COPY book-management-consumer.war /usr/local/tomcat/webapps/
+# 暴露Tomcat的默认端口  
+EXPOSE 8080
+WORKDIR /myapp
+COPY book-management-dockerfile /myapp
+#系统是x86系列的就用x86系列的包，系统是x64系列的就用x64系列的包
+COPY jdk-8u381-linux-x64.tar.gz /myapp
+RUN tar -zxvf jdk-8u381-linux-x64.tar.gz -C /myapp
+#将jdk复制到镜像中
+ENV JAVA_HOME /myapp/jdk1.8.0_381
+ENV PATH ${PATH}:${JAVA_HOME}/bin
+ENV CLASSPATH $JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+#RUN /usr/local/tomcat/bin/startup.sh
+#环境变量
+# show java version 
+CMD ["java", "-version"]
