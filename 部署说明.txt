@@ -25,9 +25,12 @@ CREATE TABLE `books` (
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
 
-6. WAR包发布：
+6. 修改book-management-provider.war\WEB-INF\classes\logback.xml里面的log_dir，指向你希望输出的位置，
+   修改book-management-consumer.war\WEB-INF\classes\logback.xml里面的log_dir，指向你希望输出的位置。
+
+7. WAR包发布：
    发布book-management-consumer.war，book-management-provider.war到tomcat服务器的webapps目录下面，
    先启动book-management-provider，再启动book-management-consumer。
    
-7. 访问应用程序：
+8. 访问应用程序：
    http://<server ip>:<tomcat access port>/book-management-consumer/
